@@ -39,12 +39,7 @@ bool Company::AddEmployee(const Employee& employee)
 		_employees[_employeeCount] = pemployee;
 
 		Employee::Employee(employee);
-
-
-
-
 		return true;
-
 
 	}
 	else return false;
@@ -110,8 +105,8 @@ int Company::Write(ostream& output)
 {
 	int count = 0;
 	for (int i = 0; i < (int) _employeeCount -1; i++)
-	{
-		_employees[i]->Write(output);
+	{	
+		Get(i)->Write(output);
 		count++;
 	}
 	return count+1;
@@ -152,7 +147,7 @@ unsigned int Company::GetEmployeeCount()
 //Frees the memory by releasing all the dynamically created employees in the array.DO NOT try to delete the actual array since it was not dynamically created.
 Company::~Company()
 {
-	for (int i = 0; i < _employeeCount; i++) 
+	for (unsigned int i = 0; i < _employeeCount; i++) 
 	{
 	delete _employees[i];
 	}

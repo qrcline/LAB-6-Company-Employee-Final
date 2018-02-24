@@ -16,15 +16,16 @@ using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
 using std::chrono::system_clock;
 
 //functions
-void load(string);
+void load(string, Company&);
 
 //main function
 int main()
 {
 	// Initilization of classes
-			Company company;
+	Company company;
 	int input = 0;
 	string fileName;
+
 	
 	while (input != 9)
 	{
@@ -37,9 +38,7 @@ int main()
 		case 1:
 			cout << "Filename: ";
 			cin >> fileName;;
-			load(fileName);
-			
-
+			load(fileName, company);
 			break;
 
 		case 2:
@@ -47,7 +46,10 @@ int main()
 			break;
 
 		case 3:
-			cout << "3";
+			
+			company.Write(cout);
+			cout << endl; 
+			
 			break;
 
 		case 4:
@@ -83,7 +85,7 @@ int main()
 
 }
 
-void load(string filename)
+void load(string filename, Company& company)
 {
 	////get file name input from user
 	//cout << "File Name:";
@@ -96,12 +98,21 @@ void load(string filename)
 	if (log.fail())
 	{
 		cout << "Can not open " << filename << endl;
-		sleep_for(1s);
+		/*sleep_for(1s);
 		cout << "Closing in 5 seconds";
 		for (int i = 0; i < 5; i++)
 		{
 			cerr << ".";
 			sleep_for(1s);
-		}
-	}	exit;
+		}*/exit;
+	}	
+	else
+	{
+		int employeesRead;
+		employeesRead= company.Read(log);
+		cout << "File loaded, " << employeesRead << " records read" << endl; 
+		// Adds employees from file
+		
+
+	}
 }

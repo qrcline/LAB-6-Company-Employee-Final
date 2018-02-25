@@ -17,6 +17,8 @@ using std::chrono::system_clock;
 
 //functions
 void load(string, Company&);
+void WriteToFile(string, Company&);
+void SearchByName(string, Company&);
 
 //main function
 int main()
@@ -24,7 +26,7 @@ int main()
 	// Initilization of classes
 	Company company;
 	int input = 0;
-	string fileName;
+	string stringInput;
 
 	
 	while (input != 9)
@@ -37,23 +39,25 @@ int main()
 		{
 		case 1:
 			cout << "Filename: ";
-			cin >> fileName;;
-			load(fileName, company);
+			cin >> stringInput;
+			load(stringInput, company);
 			break;
 
 		case 2:
-			cout << "2";
+			cout << "Filename: ";
+			cin >> stringInput;
+			 WriteToFile(stringInput, company);
+
 			break;
 
 		case 3:
-			
 			company.Write(cout);
 			cout << endl; 
-			
+	
 			break;
 
 		case 4:
-			cout << "4";
+			SearchByName(stringInput, company);
 			break;
 
 		case 5:
@@ -115,4 +119,17 @@ void load(string filename, Company& company)
 		
 
 	}
+}
+
+void WriteToFile(string fileName, Company& company)
+{
+	ofstream outputFile(fileName);
+	company.Write(outputFile);
+}
+
+void SearchByName(string name, Company& company)
+{
+
+	company.FindByName(name, );
+
 }

@@ -152,7 +152,7 @@ Company::~Company()
 	delete _employees[i];
 	}
 	
-	//delete[] _employees; 
+	
 	
 }
 

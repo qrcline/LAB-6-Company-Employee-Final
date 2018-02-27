@@ -20,6 +20,7 @@ bool Company::AddEmployee(unsigned int id, const string& name , double salary, u
 		Employee *pemployee;
 		pemployee = new Employee(id, name, salary, managerId); 
 		_employees[_employeeCount] = pemployee;
+		_employeeCount++;
 
 		return true;
 
@@ -38,7 +39,8 @@ bool Company::AddEmployee(const Employee& employee)
 		pemployee = new Employee(employee); // 
 		_employees[_employeeCount] = pemployee;
 
-		Employee::Employee(employee);
+
+		//_employeeCount++;
 		return true;
 
 	}
@@ -77,7 +79,7 @@ int Company::FindByName(const string& name, unsigned int position)
 
 int Company::Read(istream& input)
 {
-	
+	int count = 0;
 	
 	
 	while (!input.eof() && _employeeCount != MAX_EMPLOYEES )
@@ -89,13 +91,14 @@ int Company::Read(istream& input)
 			AddEmployee(*pemployee);
 			//_employeeCount++;  //This is getting incriminted somewhere else 
 			_employeeCount++;
+			count++;
 		}
 
 		
-		
+		delete pemployee; 
 	}
 	Sort();
-	return _employeeCount; 
+	return count; 
 
 
 }
@@ -104,7 +107,7 @@ int Company::Read(istream& input)
 int Company::Write(ostream& output)
 {
 	int count = 0;
-	for (int i = 0; i < (int) _employeeCount -1; i++)
+	for (int i = 0; i < (int) _employeeCount ; i++)
 	{	
 		Get(i)->Write(output);
 		count++;

@@ -1,8 +1,13 @@
 #pragma once
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
 
 #include <iostream>
 #include <string>
 #include <assert.h>
+
 using namespace std;
 
 //Employee Class declaration

@@ -56,7 +56,7 @@ unsigned int Employee::GetManagerId() const
 string Employee::ToString()
 {
 	stringstream s;
-	s << "Name:" << setw(10) << _name << " ID:" << setw(5) << right<< _id << " Salary:" << setw(10) << _salary << " Manager ID:" << setw(5) << _managerId << left;
+	s << "Name:" << setw(10) << left<< _name << right<< " ID:" << setw(5) << right<< _id << " Salary:" << setw(10) << _salary << " Manager ID:" << setw(5) << _managerId << left;
 	return s.str();
 }
 

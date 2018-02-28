@@ -1,3 +1,10 @@
+//Title: Lab 6 - CompanyMain.cpp
+
+//Purpose: reads company database, query, and add employee, run operations on employees
+// Class: CSC 2430 Winter 2018
+// Author : Quinton Cline
+
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -7,13 +14,8 @@
 #include <assert.h>
 #include "employee.h"
 #include "company.h"
-
 using namespace std;
 
-// included for error output time delay
-using namespace std::this_thread;     // sleep_for, sleep_until
-using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
-using std::chrono::system_clock;
 
 //functions
 void load(string, Company&);
@@ -30,6 +32,7 @@ int main()
 {
 	// Initilization of classes
 	Company company;
+	//variables
 	string menue = "1. Load a Company File\n2.Save Company Data to File \n3. List all Employees\n4.Search by Name \n5. Search by ID\n6. Find Employee Boss Infromation\n7. Add a New Employee\n8.Check if the Database is Full\n9. Exit\n";
 	int input = 0;
 	int flag=0;
@@ -42,39 +45,24 @@ int main()
 		cout << menue;
 		cin >> input;
 		
-		/*flag = InputCheckInt(input);
-		while (!flag)
-		{	cin.clear();
-			cin.ignore(255,'\n');
-			cout << menue; 
-			cin >> input; 
-			
-		}*/
-	
-		
-		
-
+		//Menue swithc statment
 		switch(input)
 		{
 		case 1:
 			cout << "Filename: ";
 			cin >> stringInput;
-			
-		
 			load(stringInput, company);
 			break;
 
 		case 2:
 			cout << "Filename: ";
 			cin >> stringInput; 
-			 WriteToFile(stringInput, company);
-
+			WriteToFile(stringInput, company);
 			break;
 
 		case 3:
 			company.Write(cout);
 			cout << endl; 
-	
 			break;
 
 		case 4:
@@ -114,18 +102,13 @@ int main()
 			cin.ignore(255, '\n');
 
 		}
-		/*cin.clear();
-		cin.ignore();*/
 	}
 
 }
 
+//Loads employees from file
 void load(string filename, Company& company)
 {
-	////get file name input from user
-	//cout << "File Name:";
-	//getline(cin, filename);
-
 	//opens file from specified directory
 	ifstream  log(filename);
 
@@ -133,14 +116,6 @@ void load(string filename, Company& company)
 	if (log.fail())
 	{
 		cout << "Can not open " << filename << endl;
-		/*sleep_for(1s);
-		cout << "Closing in 5 seconds";
-		for (int i = 0; i < 5; i++)
-		{
-			cerr << ".";
-			sleep_for(1s);
-		}*/
-		
 	}	
 	else
 	{
@@ -148,34 +123,37 @@ void load(string filename, Company& company)
 		employeesRead= company.Read(log);
 		cout << "File loaded, " << employeesRead << " records read" << endl; 
 		// Adds employees from file
-		
-
 	}
 }
 
+//Writes whats currently in the database to file
 void WriteToFile(string fileName, Company& company)
 {
 	ofstream outputFile(fileName);
 	company.Write(outputFile);
 }
 
+// Searches the database for a name (Case sensitive)
 int SearchByName( Company& company)
 {
 	int flag;
 	string name;
 
+	//If input is blank repromt
 	while (name == "")
 	{
 		cout << "Employee Name: ";
 		cin >> name;
 	}
-	 int position = 0;
+
+	//Steps through the array of employees checking for the name
+	//Outputs data for names matching the query
+	int position = 0;
 	for (unsigned int i = position; i < company.GetEmployeeCount(); i++)
 	{
-		
-		
 		if (position != -1)
 		{
+			//Uses FindByName() to get the positon of employee with matching name
 			position= company.FindByName(name,position);
 			if (position == -1)
 			{
@@ -187,6 +165,7 @@ int SearchByName( Company& company)
 			flag = 1;
 			position++;
 		}
+		//Outputs no employee found 
 		else
 		{
 			cout << "No Employee Found" << endl; 
@@ -199,6 +178,7 @@ int SearchByName( Company& company)
 
 }
 
+//check case statment input
 bool InputCheckInt(int input)
 {
 	if (input >= 1 && input <= 9)
@@ -212,7 +192,7 @@ bool InputCheckInt(int input)
 }
 
 
-
+//checks integer input
 bool InputCheckIntId(int input)
 {
 	if (cin.fail() == true)
@@ -223,18 +203,9 @@ bool InputCheckIntId(int input)
 	else 
 		return true;
 
-
-	/*if (input >= 1 && input <= MAX_EMPLOYEES)
-	{
-		return true;
-	}
-	else
-		return false;*/
-
-
 }
 
-
+//Search By ID function
 void SearchById(Company & company)
 {
 	int iD;
@@ -242,8 +213,11 @@ void SearchById(Company & company)
 	cout << "Employee ID: ";
 	cin >> iD;
 
+	//Loops tell flag is false
 	while (loopFlag == true)
 	{
+		//checks if initial input is an number
+		//Repromts if false
 		if (InputCheckIntId(iD) == false)
 		{
 			cin.clear();
@@ -255,25 +229,35 @@ void SearchById(Company & company)
 
 		else
 		{
+			//Vars
 			loopFlag = false;
 			int position;
+
+			//Finds postion of employee with ID using FindById()
 			position = company.FindById(iD);
+
+			//No employee found with that ID
 			if (position == -1)
 			{
 				cout << "No Employee Found" << endl << endl; 
 			}
 			else
 			{
+				//If and employee with that ID found
 				Employee* employee;
 				employee = company.Get(position);
+				//prints out employee information
 				cout << employee->ToString() << endl;
 
+				//Prompts the user if they want to give the current employee raise.
 				cout << "would you like to give " << employee->GetName() << " a raise? (Y/N): ";
 				string input;
 				cin >> input;
 				bool raiseFlag=true; 
+				//Loops tell flag is false
 				while (raiseFlag == true)
 				{
+					//Y input
 					if (input == "y" || input == "Y")
 					{
 						cout << "What is the raise: ";
@@ -281,7 +265,8 @@ void SearchById(Company & company)
 						cin.clear();
 						cin.ignore(255, '\n');
 						cin >> raise;
-
+						
+						//If input is invalid
 						if (cin.fail() == true)
 						{
 							cin.clear();
@@ -294,10 +279,12 @@ void SearchById(Company & company)
 						
 						else
 						{
+							//If imput valid initiates raise
 							employee->Raise(raise);
 							raiseFlag = false;
 						}
 					}
+					//N input
 					else if (input == "N" || input == "n")
 					{
 						raiseFlag = false;
@@ -310,21 +297,18 @@ void SearchById(Company & company)
 					}
 				}
 
-				
-
 			}
-
-
 		}
 	}
-	}
+}
 	
-
+//Finds the Manager/Boss of the employee
 void FindEmployeBoss(Company& company)
 {
 	int iD;
 	cout << "Employee ID: ";
 	cin >> iD;
+	//Checks input
 	if (InputCheckIntId(iD) == false)
 	{
 		cout << "No Employee Found" << endl;
@@ -342,22 +326,22 @@ void FindEmployeBoss(Company& company)
 		}
 		else
 		{
+			//Gets and displays information of employee
 			Employee* employee;
 			employee = company.Get(position);
 			cout << employee->ToString() << endl;
+
+			//Gets and displays information of Manager
 			cout << "Manager:" << endl;
 			Employee* manager;
 			int managerPosition = employee->GetManagerId();
 			manager = company.Get(company.FindById(employee->GetManagerId()));
 			cout << manager->ToString() << endl;
-
-			
 		}
-
-
 	}
 }
 
+//Adds a new employee specified by user
 void AddNewEmployee(Company& company)
 {
 	unsigned int iD;
@@ -365,12 +349,13 @@ void AddNewEmployee(Company& company)
 	double salary;
 	unsigned int managerID;
 	
-
-	if (company.GetEmployeeCount() == (unsigned int)10)
+	//Checks if array is full
+	if (company.GetEmployeeCount() == (unsigned int) MAX_EMPLOYEES )
 	{
 		cout << "Cannot add new records, database is full" << endl;
 	}
 	
+	//User prompted to enter employee infromation 
 	else
 	{
 		cout << "Create new employee" << endl;
@@ -388,9 +373,10 @@ void AddNewEmployee(Company& company)
 		}
 
 
-		//Checks if id alrady exists
+		//Checks if id already exists
 		bool idCheckFlag = false;
-		
+		//loops tell flag is true
+		//flag set true when correct id is entered
 		while (idCheckFlag == false )
 		{	int idLoopCount = 0;
 			for (unsigned int i = 0; i < (int)company.GetEmployeeCount(); i++)
@@ -419,23 +405,33 @@ void AddNewEmployee(Company& company)
 				}
 			}
 		}
-		
-
-
+		//Prompts user for name
 		cout << "Name: ";
 		cin >> name;
+		//Prompts user for salary and validates
 		cout << "Salary: ";
 		cin >> salary;
-		/*while (cin.fail())
+		while (cin.fail())
 		{
-			cout << "Invalid input, please try again";
+			cout << "Invalid input, please try again ";
 			cin.clear();
 			cin.ignore(255, '\n');
 			cin >> salary; 
-		}*/
+		}
+
+		//Prompts user for boss ID and validates
 		cout << "Boss ID (0 for none): ";
 		cin >> managerID;
+		while (cin.fail())
+		{
+			cout << "Invalid input, please try again ";
+			cin.clear();
+			cin.ignore(255, '\n');
+			cin >> managerID;
+		}
 		bool flag;
+
+		//Adds employee to array
 		flag = company.AddEmployee(iD, name, salary, managerID);
 
 		if (flag == true)

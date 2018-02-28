@@ -67,8 +67,6 @@ int main()
 		case 2:
 			cout << "Filename: ";
 			cin >> stringInput; 
-			
-		
 			 WriteToFile(stringInput, company);
 
 			break;
@@ -80,13 +78,10 @@ int main()
 			break;
 
 		case 4:
-			
-			
 			SearchByName( company);
 			break;
 
 		case 5:
-			
 			SearchById(company);
 			break;
 
@@ -112,7 +107,7 @@ int main()
 		default:
 			cout << "Invalid input, please try again";
 			cin.clear();
-			cin.ignore(255, '/n');
+			cin.ignore(255, '\n');
 
 		}
 		/*cin.clear();
@@ -212,14 +207,25 @@ bool InputCheckInt(int input)
 
 }
 
+
+
 bool InputCheckIntId(int input)
 {
-	if (input >= 1 && input <= MAX_EMPLOYEES)
+	if (cin.fail() == true)
+	{
+		return false;
+		
+	}
+	else 
+		return true;
+
+
+	/*if (input >= 1 && input <= MAX_EMPLOYEES)
 	{
 		return true;
 	}
 	else
-		return false;
+		return false;*/
 
 
 }
@@ -228,33 +234,74 @@ bool InputCheckIntId(int input)
 void SearchById(Company & company)
 {
 	int iD;
+	bool loopFlag = true;
 	cout << "Employee ID: ";
 	cin >> iD;
-	if (InputCheckIntId(iD) == false)
-	{
-		cout << "No Employee Found" << endl;
 
-	}
-
-	else
+	while (loopFlag == true)
 	{
-		int position;
-		position = company.FindById(iD);
-		if (position == -1)
+		if (InputCheckIntId(iD) == false)
 		{
-			cout << "No Employee Found" << endl;
-			
+			cin.clear();
+			cin.ignore(255, '\n');
+			cout << "Employee ID: ";
+			cin >> iD;
+
 		}
+
 		else
 		{
-			Employee* employee;
-			employee = company.Get(position);
-			cout << employee->ToString() << endl;
-		}
-		
+			loopFlag = false;
+			int position;
+			position = company.FindById(iD);
+			if (position == -1)
+			{
+				cout << "No Employee Found" << endl << endl; 
+			}
+			else
+			{
+				Employee* employee;
+				employee = company.Get(position);
+				cout << employee->ToString() << endl;
 
+				cout << "would you like to give " << employee->GetName() << " a raise? (Y/N): ";
+				string input;
+				bool raiseFlag; 
+				while (raiseFlag = true)
+				{
+					if (input == "y" || input == "Y")
+					{
+						cout << "What is the raise: ";
+						double raise;
+						cin >> raise;
+
+						if (cin.fail() == true)
+						{
+							cin.clear();
+							cin.ignore(255, '\n');
+							cout << "Invalid input, please try again" << endl;
+						}
+						
+						else
+						{
+							employee->Raise(raise);
+						}
+					}
+					if (input == "N" || input == "n")
+					{
+						raiseFlag = false;
+					}
+				}
+
+				
+
+			}
+
+
+		}
 	}
-}
+	}
+	
 
 void FindEmployeBoss(Company& company)
 {

@@ -112,7 +112,7 @@ int Company::Write(ostream& output)
 		Get(i)->Write(output);
 		count++;
 	}
-	return count+1;
+	return count;
 }
 
 //Returns true if the array of employees is full, false otherwise.

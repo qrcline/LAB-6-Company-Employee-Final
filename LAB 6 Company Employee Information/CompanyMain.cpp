@@ -98,6 +98,10 @@ int main()
 			{
 				cout << "The database is full " << endl; 
 			}
+			else
+			{
+				cout << "Database not full, it has " << company.GetEmployeeCount() << " records" << endl; 
+			}
 			break;
 
 		case 9:
@@ -105,7 +109,7 @@ int main()
 			break;
 
 		default:
-			cout << "Invalid input, please try again";
+			cout << "Invalid input, please try again"<<endl;
 			cin.clear();
 			cin.ignore(255, '\n');
 
@@ -266,13 +270,16 @@ void SearchById(Company & company)
 
 				cout << "would you like to give " << employee->GetName() << " a raise? (Y/N): ";
 				string input;
-				bool raiseFlag; 
-				while (raiseFlag = true)
+				cin >> input;
+				bool raiseFlag=true; 
+				while (raiseFlag == true)
 				{
 					if (input == "y" || input == "Y")
 					{
 						cout << "What is the raise: ";
 						double raise;
+						cin.clear();
+						cin.ignore(255, '\n');
 						cin >> raise;
 
 						if (cin.fail() == true)
@@ -280,16 +287,26 @@ void SearchById(Company & company)
 							cin.clear();
 							cin.ignore(255, '\n');
 							cout << "Invalid input, please try again" << endl;
+							cout << "What is the raise: ";
+							double raise;
+							cin >> raise;
 						}
 						
 						else
 						{
 							employee->Raise(raise);
+							raiseFlag = false;
 						}
 					}
-					if (input == "N" || input == "n")
+					else if (input == "N" || input == "n")
 					{
 						raiseFlag = false;
+						break;
+					}
+					else
+					{
+						cout << "Invalid input, please try again" << endl;
+						cin >> input;
 					}
 				}
 
@@ -330,7 +347,8 @@ void FindEmployeBoss(Company& company)
 			cout << employee->ToString() << endl;
 			cout << "Manager:" << endl;
 			Employee* manager;
-			manager = company.Get(employee->GetManagerId());
+			int managerPosition = employee->GetManagerId();
+			manager = company.Get(company.FindById(employee->GetManagerId()));
 			cout << manager->ToString() << endl;
 
 			
@@ -346,24 +364,87 @@ void AddNewEmployee(Company& company)
 	string name;
 	double salary;
 	unsigned int managerID;
-
-	cout << "Create new employee" << endl;
-	cout << "ID: "; 
-	cin >> iD; 
-	cout << "Name: ";
-	cin >> name;
-	cout << "Salary: ";
-	cin >> salary;
-	cout << "Manager ID: ";
-	cin >> managerID;
-	bool flag;
-	flag= company.AddEmployee(iD, name, salary, managerID);
 	
-	if (flag == true)
-	{
-		cout <<endl<< "Employee added to the database" << endl; 
-	}
 
+	if (company.GetEmployeeCount() == (unsigned int)10)
+	{
+		cout << "Cannot add new records, database is full" << endl;
+	}
+	
+	else
+	{
+		cout << "Create new employee" << endl;
+		cout << "ID: ";
+		cin >> iD;
+
+		while (InputCheckIntId(iD) == false)
+		{
+		
+			cout << "Invalid input, please try again" << endl;
+			cin.clear();
+			cin.ignore(255, '\n');
+			cin >> iD;
+
+		}
+
+
+		//Checks if id alrady exists
+		bool idCheckFlag = false;
+		
+		while (idCheckFlag == false )
+		{	int idLoopCount = 0;
+			for (unsigned int i = 0; i < (int)company.GetEmployeeCount(); i++)
+			{
+				if (iD != company.Get(i)->GetId())
+				{
+					idLoopCount++;
+				}
+			}
+			if (idLoopCount == company.GetEmployeeCount())
+			{
+				idCheckFlag = true;
+			}
+			if (idCheckFlag == false)
+			{
+				cout << "ID alrady in file, chose a different ID: ";
+				cin >> iD;
+				while (InputCheckIntId(iD) == false)
+				{
+
+					cout << "Invalid input, please try again" << endl;
+					cin.clear();
+					cin.ignore(255, '\n');
+					cin >> iD;
+
+				}
+			}
+		}
+		
+
+
+		cout << "Name: ";
+		cin >> name;
+		cout << "Salary: ";
+		cin >> salary;
+		/*while (cin.fail())
+		{
+			cout << "Invalid input, please try again";
+			cin.clear();
+			cin.ignore(255, '\n');
+			cin >> salary; 
+		}*/
+		cout << "Boss ID (0 for none): ";
+		cin >> managerID;
+		bool flag;
+		flag = company.AddEmployee(iD, name, salary, managerID);
+
+		if (flag == true)
+		{
+			cout << endl <<name<< " added successfully" << endl;
+		}
+
+	}
+	
 
 
 }

@@ -33,7 +33,7 @@ int main()
 	// Initilization of classes
 	Company company;
 	//variables
-	string menue = "1. Load a Company File\n2.Save Company Data to File \n3. List all Employees\n4.Search by Name \n5. Search by ID\n6. Find Employee Boss Infromation\n7. Add a New Employee\n8.Check if the Database is Full\n9. Exit\n";
+	string menue = "1. Load a Company File\n2. Save Company Data to File \n3. List all Employees\n4. Search by Name \n5. Search by ID\n6. Find Employee Boss Infromation\n7. Add a New Employee\n8. Check if the Database is Full\n9. Exit\n";
 	int input = 0;
 	int flag=0;
 	string stringInput;
